@@ -111,22 +111,36 @@ font-weight:bold;
 
 {% endif %}
 
-<script>
-
-function updateTime() {
-    const now = new Date();
-    document.getElementById("live-time").innerHTML =
-        now.toLocaleString('en-IN', {
-            hour12: true
-        });
-}
-
-setInterval(updateTime, 1000);
-
-</script>
-  
+ 
   
 </body>
 
+<script>
+
+function updateTime() {
+    let now = new Date();
+
+    let options = {
+        timeZone: "Asia/Kolkata",
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: true
+    };
+
+    document.getElementById("live-time").innerText =
+        new Intl.DateTimeFormat("en-IN", options).format(now);
+}
+
+// Update every second
+setInterval(updateTime, 1000);
+
+// Run immediately
+updateTime();
+
+</script>
   
 </html>
