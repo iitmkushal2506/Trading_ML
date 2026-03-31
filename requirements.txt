@@ -6,3 +6,4 @@ yfinance
 tabulate
 xgboost
 lightgbm
+gunicorn
