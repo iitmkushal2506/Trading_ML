@@ -1,12 +1,13 @@
 from flask import Flask, render_template
-from datetime import datetime, time
 import pandas as pd
 
 from data.data_pipeline import prepare_data
 from models.model import train_model
 from signals.signal_generator import generate_signal
 
+from datetime import datetime, time
 import pytz
+
 
 app = Flask(__name__)
 
@@ -80,8 +81,9 @@ def home():
         data = []
         status = "MARKET CLOSED"
 
-    ist = pytz.timezone('Asia/Kolkata')
-    current_time = datetime.now(ist)
+    # Indian Time
+    ist = pytz.timezone("Asia/Kolkata")
+    current_time = datetime.now(ist).strftime("%d-%m-%Y %H:%M:%S")
 
     return render_template(
         "index_live.html",
@@ -89,7 +91,6 @@ def home():
         status=status,
         time=current_time
     )
-
 
 # Render / Gunicorn compatible
 if __name__ == "__main__":
