@@ -1,19 +1,22 @@
 from flask import Flask, render_template
-import pandas as pd
+from datetime import datetime, time
+import pytz
 
 from data.data_pipeline import prepare_data
 from models.model import train_model
 from signals.signal_generator import generate_signal
 
-from datetime import datetime, time
-import pytz
-
-
 app = Flask(__name__)
+
+# Indian timezone
+ist = pytz.timezone("Asia/Kolkata")
+
+calls_history = []
+last_date = None
 
 
 def market_open():
-    now = datetime.now().time()
+    now = datetime.now(ist).time()
 
     start = time(9, 20)
     end = time(15, 30)
@@ -74,25 +77,42 @@ def generate_calls():
 @app.route("/")
 def home():
 
-    if market_open():
-        data = generate_calls()
-        status = "MARKET OPEN"
-    else:
-        data = []
-        status = "MARKET CLOSED"
+    global calls_history
+    global last_date
 
-    # Indian Time
-    ist = pytz.timezone("Asia/Kolkata")
-    current_time = datetime.now(ist).strftime("%d-%m-%Y %I:%M:%S %p")
+    today = datetime.now(ist).date()
+
+    # Reset next day
+    if last_date != today:
+        calls_history = []
+        last_date = today
+
+    if market_open():
+
+        data = generate_calls()
+
+        timestamp = datetime.now(ist).strftime("%d-%m-%Y %I:%M:%S %p")
+
+        calls_history.insert(0, {
+            "time": timestamp,
+            "data": data
+        })
+
+        calls_history = calls_history[:20]
+
+        status = "MARKET OPEN"
+
+    else:
+        status = "MARKET CLOSED"
 
     return render_template(
         "index_live.html",
-        data=data,
+        calls=calls_history,
         status=status,
-        time=current_time
+        today=today
     )
 
-# Render / Gunicorn compatible
+
 if __name__ == "__main__":
     import os
     port = int(os.environ.get("PORT", 10000))
