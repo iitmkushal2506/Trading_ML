@@ -59,6 +59,8 @@ color:#ef4444;
 font-weight:bold;
 }
 
+
+  
 </style>
 
 </head>
@@ -73,7 +75,7 @@ font-weight:bold;
 </span>
 </h3>
 
-<p>Time: {{ time }}</p>
+<p>Time: <span id="live-time">{{ time }}</span></p>
 
 {% if data %}
 
@@ -109,6 +111,22 @@ font-weight:bold;
 
 {% endif %}
 
+<script>
+
+function updateTime() {
+    const now = new Date();
+    document.getElementById("live-time").innerHTML =
+        now.toLocaleString('en-IN', {
+            hour12: true
+        });
+}
+
+setInterval(updateTime, 1000);
+
+</script>
+  
+  
 </body>
 
+  
 </html>
