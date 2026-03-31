@@ -6,6 +6,8 @@ from data.data_pipeline import prepare_data
 from models.model import train_model
 from signals.signal_generator import generate_signal
 
+import pytz
+
 app = Flask(__name__)
 
 
@@ -78,7 +80,8 @@ def home():
         data = []
         status = "MARKET CLOSED"
 
-    current_time = datetime.now()
+    ist = pytz.timezone('Asia/Kolkata')
+    current_time = datetime.now(ist)
 
     return render_template(
         "index_live.html",
