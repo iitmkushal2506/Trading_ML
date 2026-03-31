@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>Live Intraday Trading</title>
+
+<meta http-equiv="refresh" content="300">
+
+<style>
+
+body {
+font-family: Arial;
+background: #0f172a;
+color: white;
+padding: 20px;
+}
+
+h1 {
+text-align:center;
+}
+
+.status-open {
+color:#22c55e;
+font-weight:bold;
+}
+
+.status-closed {
+color:#ef4444;
+font-weight:bold;
+}
+
+table {
+width:100%;
+border-collapse:collapse;
+margin-top:20px;
+}
+
+th,td {
+padding:12px;
+text-align:center;
+}
+
+th {
+background:#1e293b;
+}
+
+tr:nth-child(even){
+background:#1e293b;
+}
+
+.BUY{
+color:#22c55e;
+font-weight:bold;
+}
+
+.SELL{
+color:#ef4444;
+font-weight:bold;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h1>Live Intraday ML Trading</h1>
+
+<h3>Market Status:
+<span class="{{ 'status-open' if status=='MARKET OPEN' else 'status-closed' }}">
+{{ status }}
+</span>
+</h3>
+
+<p>Time: {{ time }}</p>
+
+{% if data %}
+
+<table>
+
+<tr>
+<th>Stock</th>
+<th>Signal</th>
+<th>Entry</th>
+<th>Stop Loss</th>
+<th>Target</th>
+<th>Confidence</th>
+</tr>
+
+{% for row in data %}
+
+<tr>
+<td>{{ row.stock }}</td>
+<td class="{{ row.signal }}">{{ row.signal }}</td>
+<td>{{ row.entry }}</td>
+<td>{{ row.stop }}</td>
+<td>{{ row.target }}</td>
+<td>{{ row.confidence }}</td>
+</tr>
+
+{% endfor %}
+
+</table>
+
+{% else %}
+
+<h2>Market Closed — Waiting for Market Open</h2>
+
+{% endif %}
+
+</body>
+
+</html>
