@@ -3,7 +3,7 @@
 
 <head>
 
-<title>Live Intraday Trading</title>
+<title>Live Intraday ML Trading</title>
 
 <meta http-equiv="refresh" content="300">
 
@@ -59,8 +59,16 @@ color:#ef4444;
 font-weight:bold;
 }
 
+.time-box{
+font-size:18px;
+margin-bottom:10px;
+}
 
-  
+.note{
+color:orange;
+margin-top:10px;
+}
+
 </style>
 
 </head>
@@ -75,9 +83,20 @@ font-weight:bold;
 </span>
 </h3>
 
-<p>Time: <span id="live-time">{{ time }}</span></p>
+<div class="time-box">
+Time: <span id="live-time"></span>
+</div>
 
-{% if data %}
+{% if status == "MARKET CLOSED" and calls %}
+<div class="note">
+These are today's calls ({{today}}).  
+New calls will be generated tomorrow when market opens.
+</div>
+{% endif %}
+
+{% for call in calls %}
+
+<h3>Calls at {{ call.time }}</h3>
 
 <table>
 
@@ -90,7 +109,7 @@ font-weight:bold;
 <th>Confidence</th>
 </tr>
 
-{% for row in data %}
+{% for row in call.data %}
 
 <tr>
 <td>{{ row.stock }}</td>
@@ -105,42 +124,36 @@ font-weight:bold;
 
 </table>
 
-{% else %}
+<br><br>
 
-<h2>Market Closed — Waiting for Market Open</h2>
-
-{% endif %}
-
- 
-  
-</body>
+{% endfor %}
 
 <script>
 
 function updateTime() {
-    let now = new Date();
 
-    let options = {
-        timeZone: "Asia/Kolkata",
-        year: "numeric",
-        month: "2-digit",
-        day: "2-digit",
-        hour: "2-digit",
-        minute: "2-digit",
-        second: "2-digit",
+    const now = new Date();
+
+    const options = {
+        timeZone: 'Asia/Kolkata',
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
         hour12: true
     };
 
-    document.getElementById("live-time").innerText =
-        new Intl.DateTimeFormat("en-IN", options).format(now);
+    document.getElementById("live-time").innerHTML =
+        new Intl.DateTimeFormat('en-IN', options).format(now);
 }
 
-// Update every second
 setInterval(updateTime, 1000);
-
-// Run immediately
 updateTime();
 
 </script>
-  
+
+</body>
+
 </html>
