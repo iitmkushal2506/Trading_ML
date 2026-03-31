@@ -1,7 +1,8 @@
+flask
 pandas
 numpy
 scikit-learn
+yfinance
+tabulate
 xgboost
 lightgbm
-yfinance
-joblib
