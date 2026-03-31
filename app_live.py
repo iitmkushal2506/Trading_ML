@@ -12,7 +12,7 @@ app = Flask(__name__)
 def market_open():
     now = datetime.now().time()
 
-    start = time(9, 17)
+    start = time(9, 20)
     end = time(15, 30)
 
     return start <= now <= end
