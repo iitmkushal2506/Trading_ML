@@ -83,7 +83,7 @@ def home():
 
     # Indian Time
     ist = pytz.timezone("Asia/Kolkata")
-    current_time = datetime.now(ist).strftime("%d-%m-%Y %I:%M:%S %p")
+    current_time = datetime.now(ist).strftime(""%d-%m-%Y %H:%M:%S"")
 
     return render_template(
         "index_live.html",
