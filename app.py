@@ -1,3 +1,4 @@
+
 from flask import Flask, render_template
 from datetime import datetime, time
 import pytz
@@ -11,6 +12,7 @@ app = Flask(__name__)
 # Indian timezone
 ist = pytz.timezone("Asia/Kolkata")
 
+# Store calls history
 calls_history = []
 last_date = None
 
@@ -98,6 +100,7 @@ def home():
             "data": data
         })
 
+        # keep last 20 tables
         calls_history = calls_history[:20]
 
         status = "MARKET OPEN"
@@ -113,6 +116,7 @@ def home():
     )
 
 
+# Render deployment
 if __name__ == "__main__":
     import os
     port = int(os.environ.get("PORT", 10000))
